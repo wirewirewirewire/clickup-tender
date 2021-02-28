@@ -1,0 +1,21 @@
+.description {
+  white-space: pre;
+}
+
+.table {
+  width: 100%;
+}
+
+.placeholder {
+  width: 200px;
+  height: 1em;
+  border-bottom: 1px solid black;
+}
+
+.device {
+  padding-bottom: 1em;
+  border-bottom: 1px solid black;
+  &:last-child {
+    border: none;
+  }
+}
