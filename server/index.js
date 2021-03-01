@@ -12,19 +12,29 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 app.get("/*", (req, res) => {
-  console.log(req.url, req.params[0]);
-  axios
-    .get("https://api.clickup.com" + req.url, {
-      headers: {
+  const isOnlineApi = req.url.startsWith("/v1") ? false : true;
+
+  const url = isOnlineApi
+    ? "https://api.clickup.com"
+    : "https://app.clickup.com";
+  console.log(url + req.url);
+
+  const headers = isOnlineApi
+    ? {
         authorization: process.env.CLICKUP_TOKEN, //the token is a variable which holds the token
-      },
+      }
+    : {
+        Cookie: process.env.CLICKUP_COOKIE,
+      };
+  axios
+    .get(url + req.url, {
+      headers: headers,
     })
     .then(function (response) {
       res.write(JSON.stringify(response.data, true, 2));
       res.end();
     })
     .catch(function (error) {
-      console.log(error);
       res.write(JSON.stringify({ notworking: true }, true, 2));
       res.end();
     });

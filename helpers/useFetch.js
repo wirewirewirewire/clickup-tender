@@ -15,7 +15,6 @@ export default function useFetch(url, opts) {
     axios
       .get(url)
       .then(function (response) {
-        console.log(response.data);
         setResponse(response.data);
         setLoading(false);
       })

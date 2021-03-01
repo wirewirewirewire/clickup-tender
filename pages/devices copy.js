@@ -17,30 +17,6 @@ export default function Home({ posts }) {
     "http://localhost:8002/api/v2/space/2421163/folder?archived=false"
   );*/
 
-  const [responseStations, loadingStations, hasErrorStations] = useFetch(
-    "http://localhost:8002/api/v2/list/34161430/task"
-  );
-
-  var relatedStations = [];
-  if (responseStations && responseStations.tasks) {
-    responseStations.tasks.map((s) => {
-      const aufgaben = s.custom_fields.find((g) => g.name === "Aufgaben");
-
-      const lv1 = aufgaben.value.find(
-        (g) => g.name === "Erstellung LV Los 1 Part A: Ausstellungswände"
-      );
-
-      if (!lv1) return null;
-
-      const devices = s.custom_fields.find((f) => f.name === "Hardware Geräte");
-
-      if (devices)
-        devices.value.map((e) => {
-          if (!relatedStations.includes(e.id)) relatedStations.push(e.id);
-        });
-    });
-  }
-
   const [response, loading, hasError] = useFetch(
     "http://localhost:8002/api/v2/list/34161430/task"
   );
@@ -49,8 +25,7 @@ export default function Home({ posts }) {
     `http://localhost:8002/api/v2/list/34161439/task${taskInclude}`
   );
 
-  console.log("relatedStations", relatedStations);
-
+  console.log(responseDevices);
   return (
     <>
       {loading ? (
@@ -60,10 +35,10 @@ export default function Home({ posts }) {
       ) : (
         <>
           <div className={styles.page}>
-            {relatedStations && (
+            {responseDevices && (
               <div>
-                {relatedStations.map((e) => {
-                  return <Device id={e} />;
+                {responseDevices.tasks.map((e) => {
+                  return <Device id={e.id} responseDevices={responseDevices} />;
                 })}
               </div>
             )}
