@@ -10,7 +10,10 @@ Warning: Do not use in production!
 
 Create a .env file inside the server directory.
 
-`CLICKUP_TOKEN=pk_YOUR_TOKEN`
+```
+CLICKUP_TOKEN=pk_YOUR_TOKEN
+CLICKUP_COOKIE=YOUR_COOKIE_COPY_FROM_CHROME
+```
 
 ### Run the local server
 
@@ -22,4 +25,9 @@ Create a .env file inside the server directory.
 
 ### Run next.js
 
-`npm run start:server`
+`npm run dev`
+
+### Endpoints
+
+http://localhost:3000/ All stations
+http://localhost:3000/devices All related devices

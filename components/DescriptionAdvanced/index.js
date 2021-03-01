@@ -24,6 +24,7 @@ export default function DescriptionAdvanced({ children, id }) {
   console.log("responseAdvanced", responseAdvanced);
 
   const content = JSON.parse(responseAdvanced.content);
+  if (!content) return null;
 
   return (
     <div className={styles.description}>
