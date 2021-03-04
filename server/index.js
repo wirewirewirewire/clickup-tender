@@ -33,6 +33,7 @@ app.get("/*", (req, res) => {
       res.end();
     })
     .catch(function (error) {
+      console.log(error);
       res.write(JSON.stringify({ notworking: true }, true, 2));
       res.end();
     });
