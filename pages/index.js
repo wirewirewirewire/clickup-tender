@@ -46,7 +46,7 @@ export default function Home({ posts }) {
       ) : (
         <>
           <div className={styles.page}>
-            {response && responseDevices && (
+            {response && response.tasks && responseDevices && (
               <div>
                 {response.tasks.map((e) => {
                   const aufgaben = e.custom_fields.find(

@@ -4,12 +4,18 @@ import styles from "./styles.module.scss";
 
 function Header({ e, next }) {
   const CustomTag = `h${next?.attributes?.header}`;
+  return null;
   return <CustomTag>{e.insert}</CustomTag>;
 }
 
 function List({ e, next }) {
   const CustomTag = `li`;
+  return null;
   return <CustomTag>{e.insert}</CustomTag>;
+}
+
+function Image({ e, next }) {
+  return <img src={e.insert.image} className={styles.image} />;
 }
 
 export default function DescriptionAdvanced({ children, id }) {
@@ -34,6 +40,8 @@ export default function DescriptionAdvanced({ children, id }) {
           return <Header key={i} e={e} next={next} />;
         if (next?.attributes?.list) return <List key={i} e={e} next={next} />;
         if (e?.attributes?.list) return null;
+        if (e?.insert?.image) return <Image key={i} e={e} next={next} />;
+        console.log("e.insert", e.insert);
         return <span key={i}>{e.insert}</span>;
       })}
     </div>
