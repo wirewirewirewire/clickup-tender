@@ -17,6 +17,8 @@ CLICKUP_COOKIE=YOUR_COOKIE_COPY_FROM_CHROME
 
 ### Run the local server
 
+Make sure you run this command in the main directory.
+
 `npm run start:server`
 
 ### Install the next.js dependencies

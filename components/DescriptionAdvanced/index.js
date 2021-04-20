@@ -2,6 +2,10 @@ import React from "react";
 import useFetch from "../../helpers/useFetch";
 import styles from "./styles.module.scss";
 
+function String({ children }) {
+  if (typeof children === "string") return children;
+  return JSON.stringify(children);
+}
 function Header({ e, next }) {
   const CustomTag = next?.attributes?.header
     ? `h${next?.attributes?.header}`
@@ -11,14 +15,19 @@ function Header({ e, next }) {
 
   return (
     <CustomTag style={{ fontWeight: e?.attributes?.bold ? "bold" : undefined }}>
-      {e.insert}
+      <String>{e.insert}</String>
     </CustomTag>
   );
 }
 
 function List({ e, next }) {
   const CustomTag = `li`;
-  return <CustomTag>{e.insert}</CustomTag>;
+  return (
+    <CustomTag>
+      {" "}
+      <String>{e.insert}</String>
+    </CustomTag>
+  );
 }
 
 function Image({ e, next }) {
@@ -34,7 +43,7 @@ export default function DescriptionAdvanced({ children, id }) {
   );
 
   if (!responseAdvanced) return <span>Loading {id}</span>;
-  console.log("responseAdvanced", responseAdvanced);
+  console.log("responseAdvanced", JSON.parse(responseAdvanced.content));
 
   const content = JSON.parse(responseAdvanced.content);
   if (!content) return null;
@@ -43,12 +52,16 @@ export default function DescriptionAdvanced({ children, id }) {
     <div className={styles.description}>
       {content.ops.map((e, i) => {
         const next = content.ops[i + 1];
-        if (next?.attributes) return <Header key={i} e={e} next={next} />;
-        if (e?.attributes?.list) return null;
-        //if (next?.attributes?.list) return <List key={i} e={e} next={next} />;
-        if (e?.insert?.image) return <Image key={i} e={e} next={next} />;
         console.log("e.insert", e);
-        return <span key={i}>{e.insert}</span>;
+        if (e?.insert?.image) return <Image key={i} e={e} next={next} />;
+        if (next?.attributes) return <Header key={i} e={e} next={next} />;
+        if (next?.attributes?.list) return <List key={i} e={e} next={next} />;
+        if (e?.attributes?.list) return null;
+        return (
+          <span key={i}>
+            <String>{e.insert}</String>
+          </span>
+        );
       })}
     </div>
   );

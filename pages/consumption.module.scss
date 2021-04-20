@@ -1,0 +1,39 @@
+.consumptionTable {
+  border-spacing: 0;
+  border-collapse: collapse;
+  thead {
+    font-weight: bold;
+  }
+  td {
+    margin: 0;
+    padding: 0.1em 0.3em;
+    border: 1px solid #000;
+  }
+  tbody {
+    tr {
+      &:nth-child(2n) {
+        background: rgba(#000, 0.05);
+      }
+      &:nth-child(1) {
+        background: rgba(#000, 0.3);
+      }
+    }
+  }
+  h5 {
+    margin: 0;
+    font-size: 1em;
+    padding: 0.3em;
+  }
+}
+
+.page {
+  margin: auto;
+  max-width: 1280px;
+}
+
+.totals {
+  font-weight: bold;
+}
+.cellNumber {
+  text-align: right;
+}

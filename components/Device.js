@@ -16,7 +16,7 @@ export default function Device({ id }) {
     `http://localhost:8002/api/v2/task/${id}${taskInclude}`
   );
 
-  if (!response) return null;
+  if (!response) return <span>loading...</span>;
   return (
     <div>
       <h3 className={styles.title}>
