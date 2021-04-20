@@ -42,7 +42,6 @@ export default function DescriptionAdvanced({ id, delay }) {
     `http://localhost:8002/v1/task/${id}${taskInclude}`,
     delay
   );
-  x;
 
   if (!responseAdvanced?.content)
     return (

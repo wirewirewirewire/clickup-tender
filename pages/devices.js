@@ -49,8 +49,6 @@ export default function Home({ posts }) {
     `http://localhost:8002/api/v2/list/34161439/task${taskInclude}`
   );
 
-  console.log("relatedStations", relatedStations);
-
   return (
     <>
       {loading ? (

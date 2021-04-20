@@ -50,9 +50,14 @@ export default function Home({ posts }) {
           <div className={styles.page}>
             {response && response.tasks && responseDevices && (
               <div>
-                {response.tasks.map((e) => {
+                {response.tasks.map((e, i) => {
                   return (
-                    <Station id={e.id} responseDevices={responseDevices} />
+                    <Station
+                      id={e.id}
+                      data={e}
+                      responseDevices={responseDevices}
+                      delay={i * 300}
+                    />
                   );
                 })}
               </div>

@@ -5,37 +5,34 @@ import DescriptionAdvanced from "../DescriptionAdvanced";
 import DeviceSimple from "../DeviceSimple";
 import styles from "./styles.module.scss";
 
-export default function Device({ data, id, responseDevices }) {
+export default function Station({ data, id, responseDevices, delay }) {
   //'https://app.clickup.com/v1/task/a4qt9e?include_groups=true&fields%5B%5D=content&fields%5B%5D=assignees&fields%5B%5D=dependencies&fields%5B%5D=parent_task&fields%5B%5D=subtask_parent_task&fields%5B%5D=attachments&fields%5B%5D=hidden_attachments&fields%5B%5D=followers&fields%5B%5D=totalTimeSpent&fields%5B%5D=subtasks&fields%5B%5D=todoComments&fields%5B%5D=mentions&fields%5B%5D=tags&fields%5B%5D=position&fields%5B%5D=simple_statuses&fields%5B%5D=viewing&fields%5B%5D=commenting&fields%5B%5D=customFields&fields%5B%5D=statuses&fields%5B%5D=members&fields%5B%5D=features&fields%5B%5D=rolledUpTimeSpent&fields%5B%5D=rolledUpTimeEstimate&fields%5B%5D=rolledUpPointsEstimate&fields%5B%5D=views&fields%5B%5D=linkedTasks&fields%5B%5D=last_viewed&fields%5B%5D=new_thread_count&fields%5B%5D=commit_counts&fields%5B%5D=relationships&markItemViewed=true&include_archived_subtasks=true'
 
   const taskInclude =
     "?include_groups=true&fields%5B%5D=content&fields%5B%5D=assignees&fields%5B%5D=dependencies&fields%5B%5D=parent_task&fields%5B%5D=subtask_parent_task&fields%5B%5D=attachments&fields%5B%5D=hidden_attachments&fields%5B%5D=followers&fields%5B%5D=totalTimeSpent&fields%5B%5D=subtasks&fields%5B%5D=todoComments&fields%5B%5D=mentions&fields%5B%5D=tags&fields%5B%5D=position&fields%5B%5D=simple_statuses&fields%5B%5D=viewing&fields%5B%5D=commenting&fields%5B%5D=customFields&fields%5B%5D=statuses&fields%5B%5D=members&fields%5B%5D=features&fields%5B%5D=rolledUpTimeSpent&fields%5B%5D=rolledUpTimeEstimate&fields%5B%5D=rolledUpPointsEstimate&fields%5B%5D=views&fields%5B%5D=linkedTasks&fields%5B%5D=last_viewed&fields%5B%5D=new_thread_count&fields%5B%5D=commit_counts&fields%5B%5D=relationships&markItemViewed=true&include_archived_subtasks=true";
 
-  const [response, loading, hasError] = useFetch(
-    `http://localhost:8002/api/v2/task/${id}${taskInclude}`
-  );
+  /*const [response, loading, hasError] = useFetch(
+    `http://localhost:8002/api/v2/task/${id}${taskInclude}`,
+    delay
+  );*/
 
-  console.log("Advance", response);
+  if (!data || !data.custom_fields) return null;
 
-  if (!response || !response.custom_fields) return null;
+  const devices = data.custom_fields.find((f) => f.name === "Hardware Geräte");
 
-  const devices = response.custom_fields.find(
-    (f) => f.name === "Hardware Geräte"
-  );
-
-  const erzaehleinheit = response.custom_fields.find(
+  const erzaehleinheit = data.custom_fields.find(
     (g) => g.name === "Exponat Erzähleinheit"
   );
 
-  const hardwarePosition = response.custom_fields.find(
+  const hardwarePosition = data.custom_fields.find(
     (g) => g.name === "Hardware Anordnung"
   );
 
-  const medienPosition = response.custom_fields.find(
+  const medienPosition = data.custom_fields.find(
     (g) => g.name === "Medien Position"
   );
 
-  const aufgaben = response.custom_fields.find((g) => g.name === "Aufgaben");
+  const aufgaben = data.custom_fields.find((g) => g.name === "Aufgaben");
 
   /*const lv1 = aufgaben.value.find(
     (g) => g.name === "Erstellung LV Los 1 Part A: Ausstellungswände"
@@ -46,19 +43,19 @@ export default function Device({ data, id, responseDevices }) {
   return (
     <div>
       <h3 className={styles.title}>
-        <a href={response.url} target="_blank">
-          {erzaehleinheit?.value.name} {response.name}
+        <a href={data.url} target="_blank">
+          {erzaehleinheit?.value.name} {data.name}
         </a>
       </h3>
       <div className={styles.subTitle}>
         Position:{" "}
         {medienPosition.type_config.options[medienPosition.value]?.name}
       </div>
-      <DescriptionAdvanced id={response.id} />
+      <DescriptionAdvanced id={data.id} delay={delay} />
 
-      {response.attachments && (
+      {data.attachments && (
         <div>
-          {response.attachments.map((d) => (
+          {data.attachments.map((d) => (
             <>
               {d.mimetype.startsWith("image") ? (
                 <img src={d.url} key={d.id} className={styles.image} />
@@ -71,7 +68,7 @@ export default function Device({ data, id, responseDevices }) {
       )}
 
       <h4>Hardware Anmerkungen</h4>
-      <p>{customField(response, "Hardware Anmerkungen")?.value}</p>
+      <p>{customField(data, "Hardware Anmerkungen")?.value}</p>
 
       <h4>Hardwarepositionierung</h4>
       <p>{hardwarePosition?.value}</p>
