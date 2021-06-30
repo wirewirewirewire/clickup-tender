@@ -26,11 +26,11 @@ export default function Home({ posts }) {
   const token = "pk_2586274_TSD0SI9R593QKEYH7V1MDHN5GJ02WWLW";
 
   const [response, loading, hasError] = useFetch(
-    "http://localhost:8002/api/v2/list/34161430/task"
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/list/34161430/task`
   );
 
   const [responseDevices, loadingDevices, hasErrorDevices] = useFetch(
-    `http://localhost:8002/api/v2/list/34161439/task${taskInclude}`
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/list/34161439/task${taskInclude}`
   );
 
   const { responseTasks, responseDevicesFiltered } = useFilter({
@@ -38,6 +38,8 @@ export default function Home({ posts }) {
     responseDevices,
     responseFilter: false,
   });
+
+  console.log("process.env", process.env.NEXT_PUBLIC_SERVER_HOST);
 
   return (
     <>
@@ -81,7 +83,7 @@ export async function getStaticProps() {
   //const res = await fetch("https://api.clickup.com/api/v2/list/list_id");
 
   const res = await fetch(
-    "http://localhost:8002/api/v2/team", // "http://localhost:8002/api/v2/team/2412343/space?archived=false",
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/team`, // "${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/team/2412343/space?archived=false",
     {
       method: "get",
       headers: new Headers({

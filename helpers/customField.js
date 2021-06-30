@@ -1,5 +1,7 @@
 export default function customField(entry, search) {
-  return entry.custom_fields.find((g) => g.name === search);
+  return entry.custom_fields
+    ? entry.custom_fields.find((g) => g.name === search)
+    : "Field not found";
 }
 
 export function customFieldOptions(entry, search) {

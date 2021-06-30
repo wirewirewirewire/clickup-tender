@@ -20,11 +20,11 @@ export default function Home({ posts }) {
   const token = "pk_2586274_TSD0SI9R593QKEYH7V1MDHN5GJ02WWLW";
 
   const [response, loading, hasError] = useFetch(
-    "http://localhost:8002/api/v2/list/34161430/task"
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/list/34161430/task`
   );
 
   const [responseDevices, loadingDevices, hasErrorDevices] = useFetch(
-    `http://localhost:8002/api/v2/list/34161439/task${taskInclude}`
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/list/34161439/task${taskInclude}`
   );
 
   const responseSort = (a, b) => {
@@ -44,6 +44,16 @@ export default function Home({ posts }) {
   const data = useGroup({
     response,
   });
+
+  const list = [
+    { title: "LAN (PoE) Boden" },
+    { title: "LAN (PoE) Decke" },
+    { title: "LAN (PoE) Wand" },
+    { title: "Strom Boden" },
+    { title: "Strom Decke" },
+    { title: "Strom Wand" },
+    { title: "Strom Leistung", additional: " W" },
+  ];
 
   return (
     <>
@@ -66,8 +76,8 @@ export default function Home({ posts }) {
                     <td>LAN (PoE) Wand</td>
                     <td>Strom Boden</td>
                     <td>Strom Decke</td>
-                    <td>Strom Leistung</td>
                     <td>Strom Wand</td>
+                    <td>Strom Leistung</td>
                   </tr>
                 </thead>
 
@@ -97,27 +107,12 @@ export default function Home({ posts }) {
                     <td></td>
                     <td></td>
 
-                    <td className={styles.cellNumber}>
-                      {calcTotal(response.tasks, "LAN (PoE) Boden")}
-                    </td>
-                    <td className={styles.cellNumber}>
-                      {calcTotal(response.tasks, "LAN (PoE) Decke")}
-                    </td>
-                    <td className={styles.cellNumber}>
-                      {calcTotal(response.tasks, "LAN (PoE) Wand")}
-                    </td>
-                    <td className={styles.cellNumber}>
-                      {calcTotal(response.tasks, "Strom Boden")}
-                    </td>
-                    <td className={styles.cellNumber}>
-                      {calcTotal(response.tasks, "Strom Decke")}
-                    </td>
-                    <td className={styles.cellNumber}>
-                      {calcTotal(response.tasks, "Strom Leistung")}W
-                    </td>
-                    <td className={styles.cellNumber}>
-                      {calcTotal(response.tasks, "Strom Wand")}
-                    </td>
+                    {list.map((e) => (
+                      <td className={styles.cellNumber}>
+                        {calcTotal(response.tasks, e.title)}
+                        {e.additional}
+                      </td>
+                    ))}
                   </tr>
                 </tbody>
               </table>
@@ -141,7 +136,7 @@ export async function getStaticProps() {
   //const res = await fetch("https://api.clickup.com/api/v2/list/list_id");
 
   const res = await fetch(
-    "http://localhost:8002/api/v2/team", // "http://localhost:8002/api/v2/team/2412343/space?archived=false",
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/team`, // "${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/team/2412343/space?archived=false",
     {
       method: "get",
       headers: new Headers({

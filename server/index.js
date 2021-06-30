@@ -14,7 +14,9 @@ app.use(cors(corsOptions));
 app.get("/*", (req, res) => {
   const isOnlineApi = req.url.startsWith("/v1") ? false : true;
 
-  const url = isOnlineApi ? "https://api.clickup.com" : "https://app.clickup.com";
+  const url = isOnlineApi
+    ? "https://api.clickup.com"
+    : "https://app.clickup.com";
   console.log(url, process.env.CLICKUP_COOKIE);
 
   const headers = isOnlineApi

@@ -12,27 +12,19 @@ export default function Station({ data, id, responseDevices, delay }) {
     "?include_groups=true&fields%5B%5D=content&fields%5B%5D=assignees&fields%5B%5D=dependencies&fields%5B%5D=parent_task&fields%5B%5D=subtask_parent_task&fields%5B%5D=attachments&fields%5B%5D=hidden_attachments&fields%5B%5D=followers&fields%5B%5D=totalTimeSpent&fields%5B%5D=subtasks&fields%5B%5D=todoComments&fields%5B%5D=mentions&fields%5B%5D=tags&fields%5B%5D=position&fields%5B%5D=simple_statuses&fields%5B%5D=viewing&fields%5B%5D=commenting&fields%5B%5D=customFields&fields%5B%5D=statuses&fields%5B%5D=members&fields%5B%5D=features&fields%5B%5D=rolledUpTimeSpent&fields%5B%5D=rolledUpTimeEstimate&fields%5B%5D=rolledUpPointsEstimate&fields%5B%5D=views&fields%5B%5D=linkedTasks&fields%5B%5D=last_viewed&fields%5B%5D=new_thread_count&fields%5B%5D=commit_counts&fields%5B%5D=relationships&markItemViewed=true&include_archived_subtasks=true";
 
   /*const [response, loading, hasError] = useFetch(
-    `http://localhost:8002/api/v2/task/${id}${taskInclude}`,
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/task/${id}${taskInclude}`,
     delay
   );*/
 
   if (!data || !data.custom_fields) return null;
-
-  const devices = data.custom_fields.find((f) => f.name === "Hardware Geräte");
-
-  const erzaehleinheit = data.custom_fields.find(
-    (g) => g.name === "Exponat Erzähleinheit"
-  );
-
-  const hardwarePosition = data.custom_fields.find(
-    (g) => g.name === "Hardware Anordnung"
-  );
-
-  const medienPosition = data.custom_fields.find(
-    (g) => g.name === "Medien Position"
-  );
-
-  const aufgaben = data.custom_fields.find((g) => g.name === "Aufgaben");
+  const devices = customField(data, "Hardware Geräte");
+  const erzaehleinheit = customField(data, "Exponat Erzähleinheit");
+  const hardwarePosition = customField(data, "Hardware Anordnung");
+  const medienPosition = customField(data, "Medien Position");
+  const aufgaben = customField(data, "Aufgaben");
+  const medienTyp = customField(data, "Medien Typ");
+  const anhaenge = customField(data, "Anhänge");
+  const multiple = customField(data, "Hardware multiple");
 
   /*const lv1 = aufgaben.value.find(
     (g) => g.name === "Erstellung LV Los 1 Part A: Ausstellungswände"
@@ -49,8 +41,12 @@ export default function Station({ data, id, responseDevices, delay }) {
       </h3>
       <div className={styles.subTitle}>
         Position:{" "}
-        {medienPosition.type_config.options[medienPosition.value]?.name}
+        {medienPosition.type_config.options[medienPosition.value]?.name} |
+        Medientyp: {medienTyp.type_config.options[medienTyp.value]?.name}
       </div>
+
+      <h2>Beschreibung</h2>
+
       <DescriptionAdvanced id={data.id} delay={delay} />
 
       {data.attachments && (
@@ -67,21 +63,43 @@ export default function Station({ data, id, responseDevices, delay }) {
         </div>
       )}
 
-      <h4>Hardware Anmerkungen</h4>
-      <p>{customField(data, "Hardware Anmerkungen")?.value}</p>
+      {customField(data, "Hardware Anmerkungen")?.value && (
+        <>
+          <h2>Hardware Anmerkungen</h2>
+          <p className={styles.longText}>
+            {customField(data, "Hardware Anmerkungen")?.value}
+          </p>
+        </>
+      )}
 
-      <h4>Hardwarepositionierung</h4>
-      <p>{hardwarePosition?.value}</p>
+      <h2>Hardwarepositionierung</h2>
+      <p className={styles.longText}>{hardwarePosition?.value}</p>
+
+      <h2>Anhänge</h2>
+      {anhaenge?.value && (
+        <ul>
+          {anhaenge.value.map((e) => (
+            <li>
+              <a href={e.url} target="_blank">
+                {e.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <h2>Geräte</h2>
       {devices && (
-        <div>
+        <ul>
           {devices.value.map((d) => (
             <DeviceSimple
               id={d.id}
               data={responseDevices.tasks.find((r) => r.id === d.id)}
               key={d.id}
+              multiple={customField(data, "Hardware multiple")?.value}
             />
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );

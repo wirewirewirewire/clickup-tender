@@ -13,12 +13,9 @@ const taskInclude =
   "?include_groups=true&fields%5B%5D=content&fields%5B%5D=assignees&fields%5B%5D=dependencies&fields%5B%5D=parent_task&fields%5B%5D=subtask_parent_task&fields%5B%5D=attachments&fields%5B%5D=hidden_attachments&fields%5B%5D=followers&fields%5B%5D=totalTimeSpent&fields%5B%5D=subtasks&fields%5B%5D=todoComments&fields%5B%5D=mentions&fields%5B%5D=tags&fields%5B%5D=position&fields%5B%5D=simple_statuses&fields%5B%5D=viewing&fields%5B%5D=commenting&fields%5B%5D=customFields&fields%5B%5D=statuses&fields%5B%5D=members&fields%5B%5D=features&fields%5B%5D=rolledUpTimeSpent&fields%5B%5D=rolledUpTimeEstimate&fields%5B%5D=rolledUpPointsEstimate&fields%5B%5D=views&fields%5B%5D=linkedTasks&fields%5B%5D=last_viewed&fields%5B%5D=new_thread_count&fields%5B%5D=commit_counts&fields%5B%5D=relationships&markItemViewed=true&include_archived_subtasks=true";
 export default function Home({ posts }) {
   const token = process.env.CLICKUP_TOKEN;
-  /*const [response, loading, hasError] = useFetch(
-    "http://localhost:8002/api/v2/space/2421163/folder?archived=false"
-  );*/
 
   const [responseStations, loadingStations, hasErrorStations] = useFetch(
-    "http://localhost:8002/api/v2/list/34161430/task"
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/list/34161430/task`
   );
 
   var relatedStations = [];
@@ -29,8 +26,9 @@ export default function Home({ posts }) {
       const lv1 = aufgaben.value.find(
         (g) => g.name === "Erstellung LV Los 1 Part A: Ausstellungswände"
       );
+      if (!aufgaben) return null;
 
-      if (!lv1) return null;
+      //if (!lv1) return null;
 
       const devices = s.custom_fields.find((f) => f.name === "Hardware Geräte");
 
@@ -42,11 +40,11 @@ export default function Home({ posts }) {
   }
 
   const [response, loading, hasError] = useFetch(
-    "http://localhost:8002/api/v2/list/34161430/task"
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/list/34161430/task`
   );
 
   const [responseDevices, loadingDevices, hasErrorDevices] = useFetch(
-    `http://localhost:8002/api/v2/list/34161439/task${taskInclude}`
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/list/34161439/task${taskInclude}`
   );
 
   return (
@@ -84,7 +82,7 @@ export async function getStaticProps() {
   //const res = await fetch("https://api.clickup.com/api/v2/list/list_id");
 
   const res = await fetch(
-    "http://localhost:8002/api/v2/team", // "http://localhost:8002/api/v2/team/2412343/space?archived=false",
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/team`, // "${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/team/2412343/space?archived=false",
     {
       method: "get",
       headers: new Headers({

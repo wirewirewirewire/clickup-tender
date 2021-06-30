@@ -5,7 +5,7 @@ import styles from "./styles.module.scss";
 
 export default function Device({ data, id }) {
   const [response, loading, hasError] = useFetch(
-    `http://localhost:8002/api/v2/task/${id}`
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/api/v2/task/${id}`
   );
 
   console.log("Advance", response);
