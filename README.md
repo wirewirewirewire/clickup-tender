@@ -1,8 +1,6 @@
 # clickup-tender
 
-```
-Warning: Do not use in production!
-```
+## Warning: Do not use in production!
 
 ### Install the local servers dependencies
 
