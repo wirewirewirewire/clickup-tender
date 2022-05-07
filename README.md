@@ -1,5 +1,7 @@
 # clickup-tender
 
+Create custom react websites out of ClickUp Information using the official API and the internal API (to get formatted content). We are using it internally to create pdfs for tenders directly from ClickUp.
+
 ## Warning: Do not use in production!
 
 ### Install the local servers dependencies
